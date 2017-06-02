@@ -74,6 +74,14 @@ float GSmithCorrelated( float roughness, float ndotv, float ndotl )
 	return 0.5f / ( visV + visL );
 }
 
+float GSmithShclick( float roughness, float ndotv, float ndotl )
+{
+	float k = roughness * 0.5f;
+	float visV = 0.5f / (ndotv * (1.0f - k) + k);
+	float visL = 0.5f / (ndotl * (1.0f - k) + k);
+	return visV * visL;
+}
+
 int main()
 {
     float const MATH_PI         = 3.14159f;
@@ -127,7 +135,7 @@ int main()
 
                 if ( ndotl > 0.0f )
                 {
-                    float const gsmith      = GSmithCorrelated( roughness, ndotv, ndotl );
+                    float const gsmith      = GSmithShclick( roughness, ndotv, ndotl );
                     float const ndotlVisPDF = ndotl * gsmith * ( 4.0f * vdoth / ndoth );
                     float const fc          = powf( 1.0f - vdoth, 5.0f );
 
